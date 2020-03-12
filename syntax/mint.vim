@@ -20,11 +20,9 @@ syntax keyword mintBlock
 
 syntax keyword mintCompoundType
       \ Result Maybe Promise Array
-syntax cluster mintType add=mintCompoundType
 
 syntax keyword mintLiteralType
       \ Number Bool String Object Time Html Void Never
-syntax cluster mintType add=mintLiteralType
 
 syntax keyword mintDeclarator
       \ component module routes
@@ -39,25 +37,21 @@ syntax keyword mintKeyword
       \ decode encode return connect use
 
 syntax keyword mintOperator
-      \ "<{ }>" "::" "=>" "|>" "<|"
+      \ "<{" "}>" "::" "=>" "|>" "<|"
 
 syntax keyword mintSpecifier
       \ as break return using get exposing ok error just nothing void
 
 " String
-syntax region mintString matchgroup=mintStringDelimiter start=/"/ skip=/\\"/ end=/"/ oneline contains=mintInteroplatedWrapper
+syntax region mintString matchgroup=mintStringDelimiter start=/"/ skip=/\\"/ end=/"/ oneline
 " String interpolation
 syntax region mintStringInterpolation matchgroup=mintInterpolationDelimiter start="#{" end="}" contained containedin=mintString contains=@mintAll
 
 " Numbers
-syntax match mintNumber "\v<\d+>"
-syntax match mintNumber "\v<\d+\.\d+>"
+syntax match mintNumber "\v<\d+(\.\d+)?>"
 
 " Pascal-cased types
-syntax match mintDefinedType "\v[A-Z][A-Za-z0-9]*(\.[A-Z][A-Za-z0-9]*)*"
-syntax cluster mintType add=mintDefinedType
-
-syntax match mintIdentifier "\w+"
+syntax match mintDefinedType "\v<[A-Z][A-Za-z0-9]*(\.[A-Z][A-Za-z0-9]*)*>"
 
 
 syntax cluster mintAll contains=mintBlock,mintCompoundType,mintDeclarator,mintInitializer,mintKeyword,mintOperator,mintSpecifier,mintString
@@ -69,12 +63,9 @@ syntax region mintEmbeddedHtmlRegion
       \ end=+</\z1\_s\{-}>+
       \ end=+/>+
       \ fold
-      \ contains=@Spell,@XMLSyntax
+      \ contains=@Spell,@XMLSyntax,@mintAll
       \ keepend
 
-
-
-"syntax match mintJsInterpolationQuotes /[{}]/
 syntax region mintEmbeddedJsRegion
       \ matchgroup=mintJsInterpolationQuotes
       \ start="`"
@@ -86,27 +77,29 @@ syntax region mintEmbeddedJsRegion
 hi link mintJsInterpolationQuotes Delimiter
 
 syntax match mintBraces /[{}]/
-syntax keyword mintStyleKeyword style nexgroup=mintStyleIdentifier skipwhite nextgroup=mintStyleIdentifier
+syntax keyword mintStyleKeyword style skipwhite nextgroup=mintStyleIdentifier
 syntax match mintStyleIdentifier /\<\k\k*/ contained skipwhite skipempty nextgroup=mintStyleBlock
 syntax region mintStyleBlock contained matchgroup=mintBraces start="{" end="}" contains=@mintAll,cssDefinition,cssTagName,cssAttributeSelector,cssClassName,cssIdentifier,cssAtRule,cssAttrRegion,css.*Prop,cssComment,cssValue.*,cssColor,cssURL,cssImportant,cssCustomProp,cssError,cssStringQ,cssStringQQ,cssFunction,cssUnicodeEscape,cssVendor,cssDefinition,cssHacks,cssNoise
 
 " Colour links
-hi link mintKeyword         Keyword
-hi link mintOperator        Operator
+hi link mintKeyword                Keyword
+hi link mintOperator               Operator
 
-hi link mintBlock           Statement
-hi link mintDeclarator      PreProc
-hi link mintStructureDeclarator Structure
-hi link mintInitializer     PreProc
-hi link mintSpecifier       Statement
+hi link mintBlock                  Statement
+hi link mintDeclarator             PreProc
+hi link mintStructureDeclarator    Structure
+hi link mintInitializer            PreProc
+hi link mintSpecifier              Statement
 
-hi link mintString          String
-hi link mintNumber          Number
+hi link mintString                 String
+hi link mintNumber                 Number
 
-hi link mintType            Type
+hi link mintCompoundType           Type
+hi link mintLiteralType            Type
+hi link mintDefinedType            Type
 
-hi link mintStringDelimiter Delimiter
-hi link mintInterpolationDelimiter Delimiter
+hi link mintStringDelimiter        Delimiter
+hi link mintInterpolationDelimiter Special
 
-hi link mintStyleKeyword    Type
-hi link mintStyleIdentifier Statement
+hi link mintStyleKeyword           Type
+hi link mintStyleIdentifier        Statement
