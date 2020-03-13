@@ -22,13 +22,13 @@ syntax keyword mintCompoundType
       \ Result Maybe Promise Array
 
 syntax keyword mintLiteralType
-      \ Number Bool String Object Time Html Void Never
+      \ Number Bool String Object Time Html Void Never Tuple
 
 syntax keyword mintDeclarator
       \ component module routes
 
 syntax keyword mintStructureDeclarator
-      \ enum record store provider
+      \ enum record store provider const
 
 syntax keyword mintInitializer
       \ fun let where next state property
